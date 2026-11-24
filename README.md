@@ -1,9 +1,17 @@
 # Análise de Complexidade Experimental: 2-Coloração (P) × 3-Coloração (NP-Completo)
 
-Projeto desenvolvido para a disciplina de **Teoria da Computação / Teoria da Complexidade**, comparando o desempenho teórico e empírico de dois algoritmos de coloração de grafos implementados em **C99 (`-O2`)** e **Python 3**:
+Projeto desenvolvido para a disciplina de **Teoria da Computação / Teoria da Complexidade**, comparando o desempenho teórico e empírico de dois algoritmos de coloração de vértices em grafos implementados em **C99 (`-O2`)** e **Python 3**:
 
 - **Algoritmo A (Classe P):** 2-Coloração de grafos via Busca em Largura (BFS) — $O(V + E)$
-- **Algoritmo B (Classe NP-Completo):** 3-Coloração de grafos via Backtracking com poda — $O(3^V)$
+- **Algoritmo B (Classe NP-Completo):** 3-Coloração de grafos via Backtracking com poda — $O(3^V \cdot V)$
+
+## Equipe
+
+- **Arthur Martins**
+- **Maria Clara Targino**
+- **Nicole Brito**
+- **Vinicius Tenorio**
+- **Maria Emilia**
 
 ## Estrutura do Repositório
 
@@ -13,16 +21,17 @@ Projeto desenvolvido para a disciplina de **Teoria da Computação / Teoria da C
 ├── python/
 │   └── coloracao.py         # Implementações espelho em Python 3
 ├── gerar_entradas.py        # Gerador determinístico de grafos (SEED = 42)
-├── benchmark.py             # Compilação, testes de corretude e benchmark (20 reps)
+├── benchmark.py             # Compilação, testes de corretude e benchmark (15–20 reps)
+├── memoria.py               # Medição de memória auxiliar (tracemalloc / contabilização C99)
 ├── gerar_graficos.py        # Geração dos gráficos comparativos em 300 DPI
 ├── resultados/
-│   └── benchmark.csv        # Dados experimentais coletados (média e desvio-padrão)
-└── graficos/                # Figuras geradas para o relatório
-
+│   ├── benchmark.csv        # Dados experimentais de tempo (média e desvio-padrão)
+│   └── memoria.csv          # Dados experimentais de complexidade de espaço
+└── graficos/                # Figuras geradas para o relatório técnico
 
 Requisitos
 
-    GCC com suporte a C99 (gcc --version)
+    GCC com suporte ao padrão C99 (gcc --version)
 
     Python 3.10+ com as bibliotecas pandas, matplotlib e numpy
 
@@ -32,48 +41,30 @@ pip install pandas matplotlib numpy
 
 Como Reproduzir os Resultados
 
-    Clonar o repositório e acessar a pasta raiz:
+    Clonar o repositório e acessar o diretório raiz:
     Bash
 
-    git clone <URL_DO_SEU_REPOSITORIO>
+    git clone [https://github.com/viniinitc/Trabalho-teoria-2cvs3c.git](https://github.com/viniinitc/Trabalho-teoria-2cvs3c.git)
     cd Trabalho-teoria-2cvs3c
 
-    Gerar as instâncias de entrada (seed fixa = 42):
+    Gerar as instâncias de entrada (semente aleatória fixa = 42):
     Bash
 
     python gerar_entradas.py
 
-    Compilar C99, validar testes automatizados de corretude e executar o benchmark:
+    (Cria os grafos de melhor caso, caso médio/transição de fase e pior caso na pasta entradas/.)
+
+    Compilar C99, executar testes automatizados de corretude e rodar o benchmark de tempo:
     Bash
 
     python benchmark.py
 
-    (Saída salva em resultados/benchmark.csv)
+    (Valida a equivalência entre as 4 implementações, realiza aquecimento, executa 15 a 20 repetições por instância com teto de 60 segundos e exporta os resultados para resultados/benchmark.csv.)
 
-    Gerar os gráficos em alta resolução (300 DPI):
+    Executar a análise de complexidade de espaço (bônus) e gerar todos os gráficos (300 DPI):
     Bash
 
+    python memoria.py
     python gerar_graficos.py
 
-    (Imagens salvas em graficos/)
-
-
----
-
-### Checklist Final
-
-<TemplateWidget component_placeholder_id="im_3ae6580a6a79676b" header_title="Plano de Execução — Entrega 24/11 (23:59h)" templateName="checklist">
-```json
-{
-  "categories": ["Código e Experimentos", "Análise e Gráficos", "Relatório e Apresentação"],
-  "items": [
-    { "id": "1", "label": "Definir as 2 linguagens (C99 com -O2 e Python)", "category": "Código e Experimentos", "checked": true },
-    { "id": "2", "label": "Criar gerador de grafos com seed fixa (gerar_entradas.py)", "category": "Código e Experimentos", "checked": true },
-    { "id": "3", "label": "Implementar BFS (2-coloração) e Backtracking (3-coloração) nas 2 linguagens (coloracao.c e coloracao.py)", "category": "Código e Experimentos", "checked": true },
-    { "id": "4", "label": "Rodar testes automatizados de corretude garantindo saída idêntica nas 4 versões", "category": "Código e Experimentos", "checked": true },
-    { "id": "5", "label": "Executar benchmark (15-30 repetições, warm-up, corte de 60s) e salvar resultados/benchmark.csv", "category": "Análise e Gráficos", "checked": true },
-    { "id": "6", "label": "Gerar gráficos (P vs NP, Linguagem vs Linguagem, Teórico vs Medido) e tabelas (média ± desvio-padrão)", "category": "Análise e Gráficos", "checked": true },
-    { "id": "7", "label": "Redigir PDF único nos 7 tópicos + Specs do PC + Contribuições + Declaração de IA", "category": "Relatório e Apresentação", "checked": true },
-    { "id": "8", "label": "Subir repositório limpo no GitHub com README reproduzível e preparar pitch de 7 min", "category": "Relatório e Apresentação", "checked": false }
-  ]
-}
+    (Salva os dados de memória em resultados/memoria.csv e gera as 5 figuras comparativas na pasta graficos/.)
