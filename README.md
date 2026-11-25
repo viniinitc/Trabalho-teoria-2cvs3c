@@ -63,7 +63,7 @@ cd Trabalho-teoria-2cvs3c
 python gerar_entradas.py
 ```
 
-Cria na pasta `entradas/` os grafos de melhor caso, caso médio (grafos aleatórios perto da transição de fase) e pior caso. Os quatro programas leem exatamente os mesmos arquivos.
+Cria na pasta `entradas/` os grafos de melhor caso, caso médio (grafos aleatórios G(n, M), com grau médio 4,0 na 2-Coloração e 4,69 na 3-Coloração, perto da transição de fase) e pior caso. Os quatro programas leem exatamente os mesmos arquivos. (O `benchmark.py` também gera as entradas sozinho se a pasta `entradas/` não existir.)
 
 **3. Compilar, testar e medir o tempo**
 
@@ -71,14 +71,14 @@ Cria na pasta `entradas/` os grafos de melhor caso, caso médio (grafos aleatór
 python benchmark.py
 ```
 
-O script executa, nesta ordem:
+O script realiza as seguintes etapas:
 
-1. Compila o código C99 com `-std=c99 -O2`.
-2. Roda os **testes de corretude** (`rodar_testes_corretude()`), que verificam se C99 e Python dão a mesma resposta (0 ou 1) em todas as instâncias e se todo grafo 2-colorível também é 3-colorível. Isso ocorre antes de qualquer medição.
+1. Compila o código C99 com `-std=c99 -O2` (mais `-Wall -Wextra`).
+2. Roda os **testes de corretude** (`rodar_testes_corretude()`), que verificam se C99 e Python dão a mesma resposta (0 ou 1) nas instâncias de V = 10, 14 e 18 (melhor, médio e pior caso) e se todo grafo 2-colorível também é 3-colorível. Se alguma verificação falhar, o script é interrompido (`assert`) antes de qualquer medição.
 3. Faz uma rodada de aquecimento (warm-up).
 4. Mede **somente a execução do algoritmo**; leitura de arquivos e impressão ficam fora da medição.
 5. Executa 20 repetições por instância (15 para V ≥ 26 na 3-Coloração) e calcula média e desvio-padrão.
-6. Aplica o teto de 60 s por execução, interrompendo os tamanhos seguintes se for excedido.
+6. Aplica um timeout ao lote de repetições e, se o tempo médio passar de 60 s, pula os tamanhos seguintes da 3-Coloração naquele caso e linguagem (marcados como `SKIPPED` no CSV).
 7. Salva tudo em `resultados/benchmark.csv`.
 
 > **Duração:** o 3-Coloração em Python leva até ~16 s por repetição nos maiores tamanhos, então o benchmark completo leva cerca de 10 minutos ou mais (varia conforme a máquina). Não é travamento.
@@ -90,4 +90,4 @@ python memoria.py
 python gerar_graficos.py
 ```
 
-`memoria.py` grava `resultados/memoria.csv` e `gerar_graficos.py` salva as 5 figuras em `graficos/`.
+`memoria.py` grava `resultados/memoria.csv` e também a figura `graficos/5_complexidade_espaco.png`. Ele precisa da pasta `entradas/` já criada (passo 2). `gerar_graficos.py` salva as figuras em `graficos/`.
